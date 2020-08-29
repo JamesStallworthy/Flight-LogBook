@@ -1,0 +1,59 @@
+<html>
+    <Head>
+        <title>Log Book</title>
+        <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.4.1/css/bootstrap.min.css" integrity="sha384-Vkoo8x4CGsO3+Hhxv8T/Q5PaXtkKtu6ug5TOeNV6gBiFeWPGFN9MuhOf23Q9Ifjh" crossorigin="anonymous">
+    </Head>
+    <body>
+        <div class="container">
+            <h1>Log Book</h1>
+
+            <table class = "table table-bordered">
+                <thead>
+                    <tr>
+                        <th scope="col">Date</th>
+                        <th scope="col">Aircraft Type</th>
+                        <th scope="col">Aircraft Reg</th>
+                        <th scope="col">Captain</th>
+                        <th scope="col">Holder Operating Capacity</th>
+                        <th scope="col">From</th>
+                        <th scope="col">To</th>
+                        <th scope="col">Departure Time</th>
+                        <th scope="col">Arrival Time</th>
+                        <th scope="col">In Command (P1)</th>
+                        <th scope="col">Dual (P2)</th>
+                        <th scope="col">Remarks</th>
+                    </tr>
+                </thead>
+                <tbody></tbody>
+            </div>
+        </table>
+
+        <script>
+            const electron = require('electron');
+            const {ipcRenderer} = electron;
+
+            const tbody = document.querySelector('tbody');
+
+            ipcRenderer.on('flight:add', function(e, flight){
+                // const li = document.createElement('li');
+                // const itemText = document.createTextNode(flight);
+                // li.appendChild(itemText);
+                // ul.appendChild(li);
+                console.log(flight);
+
+                let tr = document.createElement('tr');
+
+                Object.keys(flight).forEach(function(key) {
+                    let th = document.createElement('th');
+                    let itemText = document.createTextNode(flight[key]);
+
+                    th.appendChild(itemText);
+                    tr.appendChild(th);
+                });
+
+                tbody.appendChild(tr);
+            });
+
+        </script>
+    </body>
+</html>

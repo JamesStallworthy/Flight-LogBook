@@ -1,0 +1,14 @@
+{
+  "name": "flight-logbook",
+  "version": "1.0.0",
+  "description": "A log book to record flight time",
+  "main": "main.js",
+  "scripts": {
+    "start": "electron ."
+  },
+  "author": "James Stallworthy",
+  "license": "MIT",
+  "dependencies": {
+    "electron": "^10.1.0"
+  }
+}

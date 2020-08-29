@@ -1,0 +1,83 @@
+<html>
+    <Head>
+        <title>New Flight</title>
+        <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.4.1/css/bootstrap.min.css" integrity="sha384-Vkoo8x4CGsO3+Hhxv8T/Q5PaXtkKtu6ug5TOeNV6gBiFeWPGFN9MuhOf23Q9Ifjh" crossorigin="anonymous">
+    </Head>
+    <body>
+        <h1>New Flight</h1>
+        <form>
+            <div>
+                <label>Date</label>
+                <input type="date", id="FlightDate" autofocus>
+                <label>Aircraft Type</label>
+                <input type="text", id="AType" autofocus>
+                <label>Aircraft Reg</label>
+                <input type="text", id="AReg" autofocus>
+                <label>Captain</label>
+                <input type="text", id="Captain" autofocus>
+                <label>Holder Operating Capacity</label>
+                <input type="text", id="HOC" autofocus>
+                <label>From</label>
+                <input type="text", id="From" autofocus>
+                <label>To</label>
+                <input type="text", id="To" autofocus>
+                <label>Departure Time</label>
+                <input type="datetime-local", id="Dep" autofocus>
+                <label>Arrival Time</label>
+                <input type="datetime-local", id="Arv" autofocus>
+                <label>In Command (P1)</label>
+                <input type="number" step="0.1" id="P1" autofocus>
+                <label>Dual (P2)</label>
+                <input type="number" step="0.1" id="P2" autofocus>
+                <label>Remarks</label>
+                <input type="text", id="Remarks" autofocus>
+            </div>
+            <button type="submit">Add Flight</button>
+        </form>
+
+        <script>
+            const electron = require('electron');
+            const {ipcRenderer} = electron;
+
+            const form = document.querySelector('form');
+
+            form.addEventListener('submit', submitFlight);
+
+            function submitFlight(e){
+                e.preventDefault();
+
+                const FlightDate = document.querySelector('#FlightDate').value;
+                const AType = document.querySelector('#AType').value;
+                const AReg = document.querySelector('#AReg').value;
+                const Captain = document.querySelector('#Captain').value;
+                const HOC = document.querySelector('#HOC').value;
+                const From = document.querySelector('#From').value;
+                const To = document.querySelector('#To').value;
+                const Departure = document.querySelector('#Dep').value;
+                const Arrival = document.querySelector('#Arv').value;
+                const P1 = document.querySelector('#P1').value;
+                const P2 = document.querySelector('#P2').value;
+                const Remarks = document.querySelector('#Remarks').value;
+
+                const flight = {
+                    "Date": FlightDate,
+                    "AType": AType,
+                    "AReg": AReg,
+                    "Captain": Captain,
+                    "HOC": HOC,
+                    "From": From,
+                    "To": To,
+                    "Departure": Departure,
+                    "Arrival": Arrival,
+                    "P1": P1,
+                    "P2": P2,
+                    "Remarks": Remarks
+                };
+
+                console.log(flight);
+
+                ipcRenderer.send('flight:add',flight);
+            }
+        </script>
+    </body>
+</html>
