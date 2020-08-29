@@ -35,11 +35,7 @@
             const tbody = document.querySelector('tbody');
 
             ipcRenderer.on('flight:add', function(e, flight){
-                // const li = document.createElement('li');
-                // const itemText = document.createTextNode(flight);
-                // li.appendChild(itemText);
-                // ul.appendChild(li);
-                console.log(flight);
+                console.log("Adding the following flight to the ui:" + flight);
 
                 let tr = document.createElement('tr');
 

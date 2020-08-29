@@ -9,6 +9,8 @@
   "author": "James Stallworthy",
   "license": "MIT",
   "dependencies": {
+    "csv-parser": "^2.3.3",
+    "csv-writer": "^1.6.0",
     "electron": "^10.1.0"
   }
 }
