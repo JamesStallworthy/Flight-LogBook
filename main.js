@@ -12,9 +12,10 @@ let mainWindow;
 let addFlightWindow;
 
 //Flight data
-let flightDataCSV = path.join(__dirname,"LogBook.csv");
-let flightData = [];
-let CSVHeaders = [
+let logBookCSV = path.join(__dirname,"LogBook.csv");
+let allFlights = [];
+
+let logBookHeaders = [
     {id: 'FlightDate', title: 'Date'},
     {id: 'AType', title: 'Aircraft Type'},
     {id: 'AReg', title: 'Aircraft Reg'},
@@ -30,8 +31,8 @@ let CSVHeaders = [
   ]
 
 const csvWriter = createCsvWriter({
-    path: flightDataCSV,
-    header:CSVHeaders
+    path: logBookCSV,
+    header:logBookHeaders
   });
 
 // Listen for app to start
@@ -53,14 +54,14 @@ app.on('ready',function(){
         }));
 
     mainWindow.on('close', function(){
-        writeFlightDataToDisk();
+        writeLogBookToDiskAndQuit();
 
     });
 
     const mainMenu = Menu.buildFromTemplate(menuTemplate);
     Menu.setApplicationMenu(mainMenu);
 
-    mainWindow.webContents.on('did-finish-load',() => {loadFlightDataFromDisk();});
+    mainWindow.webContents.on('did-finish-load',() => {loadLogbookFromDisk();});
 
 });
 
@@ -90,23 +91,25 @@ function createAddFlightWindow(){
 // Add new flight
 ipcMain.on('flight:add', function(e,flight){
     console.log("Adding the following flight: ",flight);
-    flightData.push(flight);
+    allFlights.push(flight);
 
-    console.log("All flight data is now: ",flightData);
+    console.log("All flight data is now: ",allFlights);
 
     mainWindow.webContents.send('flight:add',flight);
     addFlightWindow.close();
 });
 
-function loadFlightDataFromDisk(){
-    if (fs.existsSync(flightDataCSV)){
-        fs.createReadStream(flightDataCSV).pipe(csvParser())
+function loadLogbookFromDisk(){
+    if (fs.existsSync(logBookCSV)){
+        fs.createReadStream(logBookCSV).pipe(csvParser())
             .on('data', (row) => {
                 let loadedFlight = {};
                 //Convert CSV headers back into ids
                 Object.keys(row).forEach(function(key){
                     loadedFlight[normaliseHeaderName(key)] = row[key];
                 });
+
+                allFlights.push(loadedFlight);
 
                 console.log("Loading the following flight from csv: ",loadedFlight);
                 mainWindow.webContents.send('flight:add',loadedFlight);
@@ -117,10 +120,10 @@ function loadFlightDataFromDisk(){
     }
 }
 
-function writeFlightDataToDisk(){
+function writeLogBookToDiskAndQuit(){
     try{
-        console.log("All flight data:", flightData);
-        csvWriter.writeRecords(flightData).then(() => {app.quit();})
+        console.log("All flight data:", allFlights);
+        csvWriter.writeRecords(allFlights).then(() => {app.quit();})
         console.log("Log book has been saved")
     }
     catch(err){
@@ -130,7 +133,7 @@ function writeFlightDataToDisk(){
 
 function normaliseHeaderName(title){
     let id = null;
-    CSVHeaders.forEach(function(item){
+    logBookHeaders.forEach(function(item){
         if (title === item.title)
             id = item.id;
     });
@@ -151,7 +154,7 @@ const menuTemplate = [
             {
                 label: 'Quit',
                 click(){
-                    app.quit();
+                    writeLogBookToDiskAndQuit();
                 }
             }
         ]
@@ -174,8 +177,8 @@ if (process.env.NODE_ENV !== "production"){
             },
             {
                 label: 'Reload from Disk',
-                click(item,focusedWindow){
-                        loadFlightDataFromDisk();
+                click(){
+                        loadLogbookFromDisk();
                     },
             }
         ]
