@@ -15,28 +15,13 @@ let addFlightWindow;
 let logBookCSV = path.join(__dirname,"LogBook.csv");
 let allFlights = [];
 
-let logBookHeaders = [
-    {id: 'FlightDate', title: 'Date'},
-    {id: 'AType', title: 'Aircraft Type'},
-    {id: 'AReg', title: 'Aircraft Reg'},
-    {id: 'Captain', title: 'Captain'},
-    {id: 'HOC', title: 'Holder Operating Capacity'},
-    {id: 'From', title: 'From'},
-    {id: 'To', title: 'To'},
-    {id: 'Departure', title: 'Departure Time'},
-    {id: 'Arrival', title: 'Arrival Time'},
-    {id: 'P1', title: 'In Command (P1)'},
-    {id: 'P2', title: 'Dual (P2)'},
-    {id: 'Remarks', title: 'Remarks'},
-  ]
-
-const csvWriter = createCsvWriter({
-    path: logBookCSV,
-    header:logBookHeaders
-  });
+let logBookHeaders;
 
 // Listen for app to start
 app.on('ready',function(){
+    //Load config
+    loadConfig();
+
     mainWindow = new BrowserWindow(
         {
             width: 1500,
@@ -61,9 +46,18 @@ app.on('ready',function(){
     const mainMenu = Menu.buildFromTemplate(menuTemplate);
     Menu.setApplicationMenu(mainMenu);
 
-    mainWindow.webContents.on('did-finish-load',() => {loadLogbookFromDisk();});
+    mainWindow.webContents.on('did-finish-load',() => {
+        mainWindow.webContents.send('init:headers',logBookHeaders);
+        loadLogbookFromDisk();
+    });
 
 });
+
+function loadConfig(){
+    let rawConfig = fs.readFileSync(path.join(__dirname,'config.json'));
+    let jsonConfig = JSON.parse(rawConfig);
+    logBookHeaders = jsonConfig.logBookHeaders;
+}
 
 function createAddFlightWindow(){
     addFlightWindow = new BrowserWindow({
@@ -85,7 +79,11 @@ function createAddFlightWindow(){
         addFlightWindow = null;
     });
 
-    addFlightWindow.menuBarVisible = false;
+    addFlightWindow.webContents.on('did-finish-load',() => {
+        addFlightWindow.webContents.send('init:headers',logBookHeaders);
+    });
+
+    //addFlightWindow.menuBarVisible = false;
 }
 
 // Add new flight
@@ -100,6 +98,7 @@ ipcMain.on('flight:add', function(e,flight){
 });
 
 function loadLogbookFromDisk(){
+    allFlights = [];
     if (fs.existsSync(logBookCSV)){
         fs.createReadStream(logBookCSV).pipe(csvParser())
             .on('data', (row) => {
@@ -122,6 +121,21 @@ function loadLogbookFromDisk(){
 
 function writeLogBookToDiskAndQuit(){
     try{
+        let headerMap = []
+        //Create a map for the csvWriter
+        logBookHeaders.forEach(function(header){
+            let tempHeader = {}
+            tempHeader['id'] = header.id;
+            tempHeader['title'] = header.title;
+            headerMap.push(tempHeader);
+        });
+
+        const csvWriter = createCsvWriter({
+            path: logBookCSV,
+            header:headerMap
+        });
+
+        console.log(logBookHeaders)
         console.log("All flight data:", allFlights);
         csvWriter.writeRecords(allFlights).then(() => {app.quit();})
         console.log("Log book has been saved")
@@ -154,7 +168,7 @@ const menuTemplate = [
             {
                 label: 'Quit',
                 click(){
-                    writeLogBookToDiskAndQuit();
+                    app.quit();
                 }
             }
         ]

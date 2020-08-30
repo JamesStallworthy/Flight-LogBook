@@ -1,0 +1,16 @@
+{
+    "logBookHeaders":[
+        {"id": "FlightDate", "title": "Date", "dataType": "date"},
+        {"id": "AType", "title": "Aircraft Type", "dataType": "text"},
+        {"id": "AReg", "title": "Aircraft Reg", "dataType": "text"},
+        {"id": "Captain", "title": "Captain", "dataType": "text"},
+        {"id": "HOC", "title": "Holder Operating Capacity", "dataType": "text"},
+        {"id": "From", "title": "From", "dataType": "text"},
+        {"id": "To", "title": "To", "dataType": "text"},
+        {"id": "Departure", "title": "Departure Time", "dataType": "datetime-local"},
+        {"id": "Arrival", "title": "Arrival Time", "dataType": "datetime-local"},
+        {"id": "P1", "title": "In Command (P1)", "dataType": "number", "step": 0.1 },
+        {"id": "P2", "title": "Dual (P2)", "dataType": "number", "step": 0.1 },
+        {"id": "Remarks", "title": "Remarks", "dataType": "text"}
+    ]
+}

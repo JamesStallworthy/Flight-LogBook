@@ -8,22 +8,7 @@
             <h1>Log Book</h1>
 
             <table class = "table table-bordered">
-                <thead>
-                    <tr>
-                        <th scope="col">Date</th>
-                        <th scope="col">Aircraft Type</th>
-                        <th scope="col">Aircraft Reg</th>
-                        <th scope="col">Captain</th>
-                        <th scope="col">Holder Operating Capacity</th>
-                        <th scope="col">From</th>
-                        <th scope="col">To</th>
-                        <th scope="col">Departure Time</th>
-                        <th scope="col">Arrival Time</th>
-                        <th scope="col">In Command (P1)</th>
-                        <th scope="col">Dual (P2)</th>
-                        <th scope="col">Remarks</th>
-                    </tr>
-                </thead>
+                <thead></thead>
                 <tbody></tbody>
             </div>
         </table>
@@ -32,7 +17,25 @@
             const electron = require('electron');
             const {ipcRenderer} = electron;
 
+            const thead = document.querySelector('thead');
             const tbody = document.querySelector('tbody');
+
+
+            ipcRenderer.on('init:headers', function(e,headerData){
+                console.log("Creating headers");
+                let tr = document.createElement('tr');
+                headerData.forEach(function(item){
+                    let th = document.createElement('th');
+                    th.scope = "col";
+
+                    let itemText = document.createTextNode(item.title);
+                    console.log(item);
+                    th.appendChild(itemText);
+                    tr.appendChild(th);
+                });
+
+                thead.appendChild(tr);
+            });
 
             ipcRenderer.on('flight:add', function(e, flight){
                 console.log("Adding the following flight to the ui:" + flight);
