@@ -10,7 +10,7 @@ Application is build using electron and nodejs. When application is ready for a 
 - [x] Display all flights in table
 - [x] Save flight to disk
 - [x] Load flight from disk and populate table
-- [ ] Load data columns from config
+- [x] Load data columns from config
 - [ ] Show totals
 - [ ] Edit flight
 - [ ] Delete flight
