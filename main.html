@@ -3,21 +3,46 @@
         <title>Log Book</title>
         <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.4.1/css/bootstrap.min.css" integrity="sha384-Vkoo8x4CGsO3+Hhxv8T/Q5PaXtkKtu6ug5TOeNV6gBiFeWPGFN9MuhOf23Q9Ifjh" crossorigin="anonymous">
         <link rel="stylesheet" href="custom.css">
+        <link rel="stylesheet" href="windowControl.css">
     </Head>
     <body>
-        <div class="container top-menu">
-            <button type="button" class="btn btn-success menu-btn">New Flight</button>
-            <button type="button" class="btn btn-warning menu-btn">Save</button>
-            <button type="button" class="btn btn-danger menu-btn">Quit</button>
+        <!--Thank you to this tutorial on custom title bar https://github.com/binaryfunt/electron-seamless-titlebar-tutorial-->
+        <header id="titlebar">
+            <div id="drag-region">            
+                <div id="window-title">
+                    <span>Flight-LogBook</span>
+                </div>
+            </div>
+            <div id="window-controls">
+                <div class="button" id="min-button">
+                  <img class="icon" srcset="icons/min-w-10.png 1x, icons/min-w-12.png 1.25x, icons/min-w-15.png 1.5x, icons/min-w-15.png 1.75x, icons/min-w-20.png 2x, icons/min-w-20.png 2.25x, icons/min-w-24.png 2.5x, icons/min-w-30.png 3x, icons/min-w-30.png 3.5x" draggable="false" />
+                </div>
+                <div class="button" id="max-button">
+                  <img class="icon" srcset="icons/max-w-10.png 1x, icons/max-w-12.png 1.25x, icons/max-w-15.png 1.5x, icons/max-w-15.png 1.75x, icons/max-w-20.png 2x, icons/max-w-20.png 2.25x, icons/max-w-24.png 2.5x, icons/max-w-30.png 3x, icons/max-w-30.png 3.5x" draggable="false" />
+                </div>
+                <div class="button" id="restore-button">
+                  <img class="icon" srcset="icons/restore-w-10.png 1x, icons/restore-w-12.png 1.25x, icons/restore-w-15.png 1.5x, icons/restore-w-15.png 1.75x, icons/restore-w-20.png 2x, icons/restore-w-20.png 2.25x, icons/restore-w-24.png 2.5x, icons/restore-w-30.png 3x, icons/restore-w-30.png 3.5x" draggable="false" />
+                </div>
+                <div class="button" id="close-button">
+                  <img class="icon" srcset="icons/close-w-10.png 1x, icons/close-w-12.png 1.25x, icons/close-w-15.png 1.5x, icons/close-w-15.png 1.75x, icons/close-w-20.png 2x, icons/close-w-20.png 2.25x, icons/close-w-24.png 2.5x, icons/close-w-30.png 3x, icons/close-w-30.png 3.5x" draggable="false" />
+                </div>
+              </div>
+        </header>
+        <div class = "spacer"></div>
+        <div class = "page-content">
+            <div class="container top-menu">
+                <button type="button" class="btn btn-success menu-btn">New Flight</button>
+                <button type="button" class="btn btn-warning menu-btn">Save</button>
+                <button type="button" class="btn btn-danger menu-btn">Quit</button>
+            </div>
+            <div class="container">
+                <table class = "table table-bordered table-dark">
+                    <thead></thead>
+                    <tbody></tbody>
+                    <tfoot></tfoot>
+                </table>
+            </div>
         </div>
-        <div class="container">
-            <table class = "table table-bordered table-dark">
-                <thead></thead>
-                <tbody></tbody>
-                <tfoot></tfoot>
-            </table>
-        </div>
-
         <script>
             const electron = require('electron');
             const {ipcRenderer} = electron;
@@ -81,5 +106,6 @@
             });
 
         </script>
+        <script src="windowControl.js"></script>
     </body>
 </html>

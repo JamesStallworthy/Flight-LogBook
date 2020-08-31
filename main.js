@@ -27,8 +27,10 @@ app.on('ready',function(){
             width: 1500,
             height: 500,
             webPreferences: {
-                nodeIntegration: true
-            }
+                nodeIntegration: true,
+                enableRemoteModule: true
+            },
+            frame:false
         });
 
     mainWindow.loadURL(
@@ -182,6 +184,7 @@ if (process.env.NODE_ENV !== "production"){
         submenu: [
             {
                 label: 'Dev tools',
+                accelerator: 'F12',
                 click(item,focusedWindow){
                         focusedWindow.toggleDevTools();
                     },

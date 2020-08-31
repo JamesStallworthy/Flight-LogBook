@@ -1,7 +1,23 @@
-/* Background pattern from Toptal Subtle Patterns */
 body{
-    /*background-image: url('prism.png');*/
-    background: #202225;
+    background: #2f3236;
+}
+
+.page-content{
+    margin-top:0px;
+}
+
+.menu-btn{
+    min-width: 150px;
+}
+
+.container {
+    padding-top: 10px;
+    width: 100%;
+    max-width: 100vw;
+}
+
+.top-menu{
+    padding-top:40px;
 }
 
 .table{
@@ -18,14 +34,4 @@ tfoot {
 
 tbody{
     background: #36393f;
-}
-
-.container {
-    padding-top: 10px;
-    width: 100%;
-    max-width: 100vw;
-}
-
-.menu-btn{
-    min-width: 150px;
 }
