@@ -17,6 +17,7 @@ Application is build using electron and nodejs. When application is ready for a 
 - [ ] Inline add flight
 - [x] Make the UI nice (Ongoing!)
 - [ ] Modify the columns from UI
+- [ ] Searches / filters
 - [ ] When editing, pull the step correctly into the input field
 - [ ] Pagination
 - [ ] Refactor any ugly code (Lots of it!)
