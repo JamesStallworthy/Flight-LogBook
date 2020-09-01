@@ -11,7 +11,7 @@ Application is build using electron and nodejs. When application is ready for a 
 - [x] Save flight to disk
 - [x] Load flight from disk and populate table
 - [x] Load data columns from config
-- [ ] Edit flight
+- [x] Edit flight
 - [x] Delete flight
 - [ ] Show totals
 - [x] Make the UI nice (Ongoing!)
