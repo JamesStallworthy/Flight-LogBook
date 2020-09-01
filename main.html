@@ -31,9 +31,9 @@
         <div class = "spacer"></div>
         <div class = "page-content">
             <div class="container top-menu">
-                <button type="button" class="btn btn-success menu-btn">New Flight</button>
-                <button type="button" class="btn btn-warning menu-btn">Save</button>
-                <button type="button" class="btn btn-danger menu-btn">Quit</button>
+                <button type="button" class="btn btn-success menu-btn" id="new-btn">New Flight</button>
+                <button type="button" class="btn btn-warning menu-btn" id="save-btn">Save</button>
+                <button type="button" class="btn btn-danger menu-btn" id="quit-btn">Quit</button>
             </div>
             <div class="container">
                 <table class = "table table-bordered table-dark">
@@ -43,9 +43,16 @@
                 </table>
             </div>
         </div>
+        <script src="windowControl.js"></script>
         <script>
             const electron = require('electron');
             const {ipcRenderer} = electron;
+
+            let rowId = -1;
+
+            const newButton = document.querySelector('#new-btn');
+            const saveButton = document.querySelector('#save-btn');
+            const quitButton = document.querySelector('#quit-btn');
 
             const thead = document.querySelector('thead');
             const tbody = document.querySelector('tbody');
@@ -85,6 +92,9 @@
 
                 let tr = document.createElement('tr');
 
+                rowId++;
+                tr.id = "r"+rowId;
+
                 Object.keys(flight).forEach(function(key) {
                     let th = document.createElement('th');
                     let itemText = document.createTextNode(flight[key]);
@@ -96,16 +106,45 @@
                 //Edit delete buttons
                 let buttonColumn = document.createElement('th')
                 buttonColumn.innerHTML = `<div class="btn-group" role="group" aria-label="Basic example">
-                    <button type="button" class="btn btn-warning">Edit</button>
-                    <button type="button" class="btn btn-danger">Delete</button>
+                    <button type="button" class="btn btn-warning btn-edit" id="e`+ rowId +`">Edit</button>
+                    <button type="button" class="btn btn-danger btn-delete" id="d`+ rowId +`">Delete</button>
                 </div>`
-                
+
                 tr.appendChild(buttonColumn);
 
                 tbody.appendChild(tr);
+
+                let editBtn = document.querySelector("#e"+rowId);
+                let deleteBtn = document.querySelector("#d"+rowId);
+
+                editBtn.addEventListener('click', function(e){
+                    
+                });
+
+                deleteBtn.addEventListener('click', deleteRow);
             });
 
+            newButton.addEventListener('click', function(e){
+                ipcRenderer.send('logBook:newFlight');
+            });
+
+            saveButton.addEventListener('click', function(e){
+                ipcRenderer.send('logBook:save');
+            });
+
+            quitButton.addEventListener('click', function(e){
+                //Win comes from the windowControl script
+                win.close();
+            });
+
+            function deleteRow(e){
+                let rowId = e.currentTarget.id.replace("d","");
+                let row = document.querySelector("tr#r"+rowId);
+                row.remove();
+
+                ipcRenderer.send('logBook:deleteRow',rowId);
+            }
+
         </script>
-        <script src="windowControl.js"></script>
     </body>
 </html>

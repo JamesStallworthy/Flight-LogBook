@@ -7,6 +7,11 @@ const csvParser = require('csv-parser');
 const createCsvWriter = require('csv-writer').createObjectCsvWriter;
 const {app ,BrowserWindow, Menu, ipcMain} = electron;
 
+let devMode = false;
+if (process.env.NODE_ENV !== "production"){
+    devMode = true;
+}
+
 //Windows
 let mainWindow;
 let addFlightWindow;
@@ -30,7 +35,7 @@ app.on('ready',function(){
                 nodeIntegration: true,
                 enableRemoteModule: true
             },
-            frame:false
+            frame:devMode
         });
 
     mainWindow.loadURL(
@@ -42,7 +47,6 @@ app.on('ready',function(){
 
     mainWindow.on('close', function(){
         writeLogBookToDiskAndQuit();
-
     });
 
     const mainMenu = Menu.buildFromTemplate(menuTemplate);
@@ -99,6 +103,21 @@ ipcMain.on('flight:add', function(e,flight){
     addFlightWindow.close();
 });
 
+// Save log book
+ipcMain.on('logBook:newFlight', function(e){
+    createAddFlightWindow();
+});
+
+// Save log book
+ipcMain.on('logBook:save', function(e){
+    writeLogBookToDisk();
+});
+
+// delete row
+ipcMain.on('logBook:deleteRow', function(e,rowId){
+    allFlights.splice(rowId,1);
+});
+
 function loadLogbookFromDisk(){
     allFlights = [];
     if (fs.existsSync(logBookCSV)){
@@ -121,6 +140,32 @@ function loadLogbookFromDisk(){
     }
 }
 
+//TODO Need to refactor this and the writeLogBookToDiskAndQuit() methods
+function writeLogBookToDisk(){
+    try{
+        let headerMap = []
+        //Create a map for the csvWriter
+        logBookHeaders.forEach(function(header){
+            let tempHeader = {}
+            tempHeader['id'] = header.id;
+            tempHeader['title'] = header.title;
+            headerMap.push(tempHeader);
+        });
+
+        let csvWriter = createCsvWriter({
+            path: logBookCSV,
+            header:headerMap
+        });
+
+        console.log(logBookHeaders)
+        console.log("All flight data:", allFlights);
+        csvWriter.writeRecords(allFlights);
+        console.log("Log book has been saved")
+    }
+    catch(err){
+        console.log(err);
+    }
+}
 function writeLogBookToDiskAndQuit(){
     try{
         let headerMap = []
@@ -132,7 +177,7 @@ function writeLogBookToDiskAndQuit(){
             headerMap.push(tempHeader);
         });
 
-        const csvWriter = createCsvWriter({
+        let csvWriter = createCsvWriter({
             path: logBookCSV,
             header:headerMap
         });
@@ -178,7 +223,7 @@ const menuTemplate = [
 ]
 
 //Dev tools
-if (process.env.NODE_ENV !== "production"){
+if (devMode){
     menuTemplate.push({
         label: 'Developer',
         submenu: [

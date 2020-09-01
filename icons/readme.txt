@@ -1,0 +1,1 @@
+Window icons are from: https://github.com/binaryfunt/electron-seamless-titlebar-tutorial
