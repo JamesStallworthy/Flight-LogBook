@@ -50,6 +50,8 @@
 
             let rowId = -1;
 
+            let localHeaderData = [];
+
             const newButton = document.querySelector('#new-btn');
             const saveButton = document.querySelector('#save-btn');
             const quitButton = document.querySelector('#quit-btn');
@@ -59,6 +61,7 @@
             const tfoot = document.querySelector('tfoot');
 
             ipcRenderer.on('init:headers', function(e,headerData){
+                localHeaderData = headerData;
                 console.log("Creating headers");
                 let tr = document.createElement('tr');
                 headerData.forEach(function(item){
@@ -110,6 +113,8 @@
                     <button type="button" class="btn btn-danger btn-delete" id="d`+ rowId +`">Delete</button>
                 </div>`
 
+                buttonColumn.className  = "rowControls"
+
                 tr.appendChild(buttonColumn);
 
                 tbody.appendChild(tr);
@@ -117,10 +122,7 @@
                 let editBtn = document.querySelector("#e"+rowId);
                 let deleteBtn = document.querySelector("#d"+rowId);
 
-                editBtn.addEventListener('click', function(e){
-                    
-                });
-
+                editBtn.addEventListener('click', editRow);
                 deleteBtn.addEventListener('click', deleteRow);
             });
 
@@ -143,6 +145,68 @@
                 row.remove();
 
                 ipcRenderer.send('logBook:deleteRow',rowId);
+            }
+
+            function editRow(e){
+                let rowId = e.currentTarget.id.replace("e","");
+                let row = document.querySelector("tr#r"+rowId);
+                
+                let columnId = 0;
+
+                row.childNodes.forEach(function(column){
+                    if (column.className != "rowControls"){
+                        let value = column.innerText;
+
+                        column.innerHTML=`<input type="`+localHeaderData[columnId].dataType+`" value="`+value+`">`
+                    }
+                    else{
+                        column.innerHTML = `<div class="btn-group" role="group" aria-label="Basic example">
+                            <button type="button" class="btn btn-success btn-edit" id="s`+ rowId +`">Save</button>
+                            </div>`
+                            let saveBtn = document.querySelector("#s"+rowId);
+
+                            saveBtn.addEventListener('click', saveRow);
+                    }
+                    columnId++;
+                });
+            }
+
+            function saveRow(e){
+                let rowId = e.currentTarget.id.replace("s","");
+                let row = document.querySelector("tr#r"+rowId);
+
+                let updateFlight = {};
+
+                let columnId = 0;
+
+                row.childNodes.forEach(function(column){
+                    if (column.className != "rowControls"){
+                        //input field
+                        let input = column.childNodes[0];
+
+                        updateFlight[localHeaderData[columnId].id] = input.value;
+
+                        //Replace input with original text
+                        column.innerHTML = "";
+                        column.innerText = input.value;
+                    }
+                    else{
+                        column.innerHTML = `<div class="btn-group" role="group" aria-label="Basic example">
+                            <button type="button" class="btn btn-warning btn-edit" id="e`+ rowId +`">Edit</button>
+                            <button type="button" class="btn btn-danger btn-delete" id="d`+ rowId +`">Delete</button>
+                        </div>`
+
+                        let editBtn = document.querySelector("#e"+rowId);
+                        let deleteBtn = document.querySelector("#d"+rowId);
+
+                        editBtn.addEventListener('click', editRow);
+                        deleteBtn.addEventListener('click', deleteRow);
+                    }
+
+                    columnId ++;
+                });
+
+                ipcRenderer.send('logBook:updateRow',rowId,updateFlight);
             }
 
         </script>

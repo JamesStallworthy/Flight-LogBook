@@ -115,7 +115,14 @@ ipcMain.on('logBook:save', function(e){
 
 // delete row
 ipcMain.on('logBook:deleteRow', function(e,rowId){
+    console.log("Deleting flight", rowId)
     allFlights.splice(rowId,1);
+});
+
+// update row
+ipcMain.on('logBook:updateRow', function(e,rowId, updatedFlight){
+    console.log("Updating row ",rowId," with ", updatedFlight)
+    allFlights[rowId] = updatedFlight;
 });
 
 function loadLogbookFromDisk(){

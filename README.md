@@ -17,7 +17,7 @@ Application is build using electron and nodejs. When application is ready for a 
 - [x] Make the UI nice (Ongoing!)
 - [ ] Modify the columns from UI
 - [ ] Refactor any ugly code
-- [ ] Create are you sure you want to save window
+- [ ] Create are you sure you want to save/delete window
 - [ ] Timestamp and backup log books
 - [ ] Save aircraft that can be selected from drop down
 - [ ] Create a release and maybe build a pipline
