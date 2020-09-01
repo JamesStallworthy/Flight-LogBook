@@ -145,11 +145,10 @@ function calculateTotals(){
                 let decimalPlaces = 0;
                 if(logBookHeaders[currentCol].hasOwnProperty('step'))
                     decimalPlaces = logBookHeaders[currentCol].step.toString().split(".")[1].length | 0;
-
                 if (columnTotals[currentCol] === undefined)
                     columnTotals[currentCol] = 0;
                 //To do - do something better than all this mess. Some weird rounding issues is happening otherwise
-                columnTotals[currentCol] = parseFloat((columnTotals[currentCol] + parseFloat(flight[key])).toFixed(decimalPlaces));
+                columnTotals[currentCol] = (parseFloat(columnTotals[currentCol]) + parseFloat(flight[key])).toFixed(decimalPlaces);
             }
             currentCol ++;
         });
