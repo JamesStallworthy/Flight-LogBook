@@ -16,6 +16,7 @@ Application is build using electron and nodejs. When application is ready for a 
 - [ ] Show totals
 - [x] Make the UI nice (Ongoing!)
 - [ ] Modify the columns from UI
+- [ ] Pagination
 - [ ] Refactor any ugly code
 - [ ] Create are you sure you want to save/delete window
 - [ ] Timestamp and backup log books
