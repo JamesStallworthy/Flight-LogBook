@@ -13,12 +13,13 @@ Application is build using electron and nodejs. When application is ready for a 
 - [x] Load data columns from config
 - [x] Edit flight
 - [x] Delete flight
-- [ ] Show totals
+- [x] Show totals
 - [ ] Inline add flight
 - [x] Make the UI nice (Ongoing!)
 - [ ] Modify the columns from UI
+- [ ] When editing, pull the step correctly into the input field
 - [ ] Pagination
-- [ ] Refactor any ugly code
+- [ ] Refactor any ugly code (Lots of it!)
 - [ ] Create are you sure you want to save/delete window
 - [ ] Timestamp and backup log books
 - [ ] Save aircraft that can be selected from drop down

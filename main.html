@@ -64,6 +64,7 @@
                 localHeaderData = headerData;
                 console.log("Creating headers");
                 let tr = document.createElement('tr');
+
                 headerData.forEach(function(item){
                     let th = document.createElement('th');
                     th.scope = "col";
@@ -83,11 +84,10 @@
                     let th = document.createElement('th');
                     tr.appendChild(th);
                 });
-                //Blank column
+                //Extra column for footer
                 let th = document.createElement('th');
                 tr.appendChild(th);
                 tfoot.appendChild(tr);
-
             });
 
             ipcRenderer.on('flight:add', function(e, flight){
@@ -124,6 +124,21 @@
 
                 editBtn.addEventListener('click', editRow);
                 deleteBtn.addEventListener('click', deleteRow);
+            });
+
+            ipcRenderer.on('logBook:updateFooter', function(e, columnTotals){
+                let colId = 0;
+                let footerRow = tfoot.childNodes[0];
+
+                //For each header - as columnTotals loses null elements
+                localHeaderData.forEach(function(){
+                    if (columnTotals[colId] !== undefined)
+                        footerRow.childNodes[colId].innerText = columnTotals[colId];
+                    else
+                        footerRow.childNodes[colId].innerText = "-";
+                    colId++;
+                });
+
             });
 
             newButton.addEventListener('click', function(e){

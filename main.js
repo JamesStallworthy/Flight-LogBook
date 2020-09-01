@@ -19,6 +19,7 @@ let addFlightWindow;
 //Flight data
 let logBookCSV = path.join(__dirname,"LogBook.csv");
 let allFlights = [];
+let columnTotals = [];
 
 let logBookHeaders;
 
@@ -101,6 +102,8 @@ ipcMain.on('flight:add', function(e,flight){
 
     mainWindow.webContents.send('flight:add',flight);
     addFlightWindow.close();
+
+    calculateTotals();
 });
 
 // Save log book
@@ -115,15 +118,45 @@ ipcMain.on('logBook:save', function(e){
 
 // delete row
 ipcMain.on('logBook:deleteRow', function(e,rowId){
-    console.log("Deleting flight", rowId)
+    console.log("Deleting flight", rowId);
     allFlights.splice(rowId,1);
 });
 
 // update row
 ipcMain.on('logBook:updateRow', function(e,rowId, updatedFlight){
-    console.log("Updating row ",rowId," with ", updatedFlight)
+    console.log("Updating row ",rowId," with ", updatedFlight);
     allFlights[rowId] = updatedFlight;
+    calculateTotals();
 });
+
+// update totals
+ipcMain.on('logBook:requestUpdatedTotals', function(e){
+    calculateTotals();
+});
+
+function calculateTotals(){
+    columnTotals = new Array(logBookHeaders.length);
+    console.log("calculating totals");
+
+    allFlights.forEach(function(flight){
+        let currentCol = 0;
+        Object.keys(flight).forEach(function(key) {
+            if (logBookHeaders[currentCol].dataType === "number"){
+                let decimalPlaces = 0;
+                if(logBookHeaders[currentCol].hasOwnProperty('step'))
+                    decimalPlaces = logBookHeaders[currentCol].step.toString().split(".")[1].length | 0;
+
+                if (columnTotals[currentCol] === undefined)
+                    columnTotals[currentCol] = 0;
+                //To do - do something better than all this mess. Some weird rounding issues is happening otherwise
+                columnTotals[currentCol] = parseFloat((columnTotals[currentCol] + parseFloat(flight[key])).toFixed(decimalPlaces));
+            }
+            currentCol ++;
+        });
+    });
+
+    mainWindow.webContents.send('logBook:updateFooter',columnTotals);
+}
 
 function loadLogbookFromDisk(){
     allFlights = [];
@@ -139,10 +172,11 @@ function loadLogbookFromDisk(){
                 allFlights.push(loadedFlight);
 
                 console.log("Loading the following flight from csv: ",loadedFlight);
-                mainWindow.webContents.send('flight:add',loadedFlight);
+                mainWindow.webContents.send('flight:add',loadedFlight, true);
             })
             .on('end',() => {
-                console.log('Flight data has been loaded.')
+                console.log('Flight data has been loaded.');
+                calculateTotals();
             });
     }
 }
