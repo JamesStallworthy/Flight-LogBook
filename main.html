@@ -172,11 +172,17 @@
                     if (column.className != "rowControls"){
                         let value = column.innerText;
 
-                        column.innerHTML=`<input type="`+localHeaderData[columnId].dataType+`" value="`+value+`">`
+                        let html = `<input type="`+localHeaderData[columnId].dataType+`" value="`+value+`"`;
+                        if (localHeaderData[columnId].hasOwnProperty("step")){
+                            html += ` step=`+localHeaderData[columnId].step;
+                        }
+                        html += `>`;
+
+                        column.innerHTML = html;
                     }
                     else{
                         column.innerHTML = `<div class="btn-group" role="group" aria-label="Basic example">
-                            <button type="button" class="btn btn-success btn-edit" id="s`+ rowId +`">Save</button>
+                                <button type="button" class="btn btn-success btn-edit" id="s`+ rowId +`">Save</button>
                             </div>`
                             let saveBtn = document.querySelector("#s"+rowId);
 

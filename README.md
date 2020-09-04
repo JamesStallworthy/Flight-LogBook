@@ -31,7 +31,7 @@ Application is built using electron and nodejs. When application is ready for a 
 
 # Outstanding issues
 - [ ] Application sometimes crashes on close due to the way the csv is written on close. Need to investigate.
-- [ ] When editing, pull the step correctly into the input field
+- [x] When editing, pull the step correctly into the input field
 - [x] If any P1 or P2 fields are empty then a NaN is given as the total
 
 # Future maybes
