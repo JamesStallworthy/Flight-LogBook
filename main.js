@@ -148,7 +148,13 @@ function calculateTotals(){
                 if (columnTotals[currentCol] === undefined)
                     columnTotals[currentCol] = 0;
                 //To do - do something better than all this mess. Some weird rounding issues is happening otherwise
-                columnTotals[currentCol] = (parseFloat(columnTotals[currentCol]) + parseFloat(flight[key])).toFixed(decimalPlaces);
+                let value;
+                if (flight[key] === '' || flight[key] === undefined)
+                    value = 0;
+                else
+                    value = parseFloat(flight[key])
+
+                columnTotals[currentCol] = (parseFloat(columnTotals[currentCol]) + value).toFixed(decimalPlaces);
             }
             currentCol ++;
         });
