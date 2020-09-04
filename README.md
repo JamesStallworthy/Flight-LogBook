@@ -3,7 +3,7 @@ A log book application to be used as a backup to physical pilot log books.
 
 The aim is to provide a free application that stores all files locally in CSV so can be easily exported somewhere else.
 
-Application is build using electron and nodejs. When application is ready for a "release" I will add that to github. 
+Application is built using electron and nodejs. When application is ready for a "release" I will add that to github. 
 
 # To do
 - [x] Add new flight to log book
@@ -18,6 +18,7 @@ Application is build using electron and nodejs. When application is ready for a 
 - [x] Make the UI nice (Ongoing!)
 - [ ] Setup/Settings screens
 - [ ] Modify the columns from UI
+- [ ] Searches / filters
 - [ ] Pagination
 - [ ] Refactor any ugly code (Lots of it!)
 - [ ] Create are you sure you want to save/delete window
