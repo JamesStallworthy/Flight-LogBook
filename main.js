@@ -8,7 +8,7 @@ const createCsvWriter = require('csv-writer').createObjectCsvWriter;
 const {app ,BrowserWindow, Menu, ipcMain} = electron;
 
 let devMode = false;
-if (process.env.NODE_ENV !== "production"){
+if (!app.isPackaged){
     devMode = true;
 }
 
