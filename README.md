@@ -5,6 +5,8 @@ The aim is to provide a free application that stores all files locally in CSV so
 
 Application is built using electron and nodejs. When application is ready for a "release" I will add that to github. 
 
+![Image](/ExampleImage.PNG?raw=true "Example image")
+
 # To do
 - [x] Add new flight to log book
 - [x] Display all flights in table
