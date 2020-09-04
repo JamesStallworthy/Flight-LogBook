@@ -16,8 +16,8 @@ Application is build using electron and nodejs. When application is ready for a 
 - [x] Show totals
 - [ ] Inline add flight
 - [x] Make the UI nice (Ongoing!)
+- [ ] Setup/Settings screens
 - [ ] Modify the columns from UI
-- [ ] When editing, pull the step correctly into the input field
 - [ ] Pagination
 - [ ] Refactor any ugly code (Lots of it!)
 - [ ] Create are you sure you want to save/delete window
@@ -27,7 +27,8 @@ Application is build using electron and nodejs. When application is ready for a 
 - [ ] Select where log book is saved
 
 # Outstanding issues
-Application sometimes crashes on close due to the way the csv is written on close. Need to investigate.
+- [ ] Application sometimes crashes on close due to the way the csv is written on close. Need to investigate.
+- [ ] When editing, pull the step correctly into the input field
 
 # Future maybes
 - [ ] Mobile?
