@@ -100,8 +100,9 @@ ipcMain.on('flight:add', function(e,flight){
 
     console.log("All flight data is now: ",allFlights);
 
-    mainWindow.webContents.send('flight:add',flight);
-    addFlightWindow.close();
+    mainWindow.webContents.send('flight:add',flight, false);
+    if (addFlightWindow != null)
+        addFlightWindow.close();
 
     calculateTotals();
 });

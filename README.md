@@ -16,7 +16,7 @@ Application is built using electron and nodejs. When application is ready for a 
 - [x] Edit flight
 - [x] Delete flight
 - [x] Show totals
-- [ ] Inline add flight
+- [x] Inline add flight
 - [x] Make the UI nice (Ongoing!)
 - [ ] Setup/Settings screens
 - [ ] Modify the columns from UI

@@ -90,7 +90,7 @@
                 tfoot.appendChild(tr);
             });
 
-            ipcRenderer.on('flight:add', function(e, flight){
+            ipcRenderer.on('flight:add', function(e, flight, loadingFlights){
                 console.log("Adding the following flight to the ui:" + flight);
 
                 let tr = document.createElement('tr');
@@ -122,8 +122,12 @@
                 let editBtn = document.querySelector("#e"+rowId);
                 let deleteBtn = document.querySelector("#d"+rowId);
 
-                editBtn.addEventListener('click', editRow);
+                editBtn.addEventListener('click', editRowAction);
                 deleteBtn.addEventListener('click', deleteRow);
+
+                if (!loadingFlights){
+                    editRow(rowId);
+                }
             });
 
             ipcRenderer.on('logBook:updateFooter', function(e, columnTotals){
@@ -141,9 +145,10 @@
 
             });
 
-            newButton.addEventListener('click', function(e){
-                ipcRenderer.send('logBook:newFlight');
-            });
+            newButton.addEventListener('click', createNewFlight);
+            // newButton.addEventListener('click', function(e){
+            //     ipcRenderer.send('logBook:newFlight');
+            // });
 
             saveButton.addEventListener('click', function(e){
                 ipcRenderer.send('logBook:save');
@@ -162,8 +167,12 @@
                 ipcRenderer.send('logBook:deleteRow',rowId);
             }
 
-            function editRow(e){
+            function editRowAction(e){
                 let rowId = e.currentTarget.id.replace("e","");
+                editRow(rowId);
+            }
+
+            function editRow(rowId){
                 let row = document.querySelector("tr#r"+rowId);
                 
                 let columnId = 0;
@@ -230,6 +239,14 @@
                 ipcRenderer.send('logBook:updateRow',rowId,updateFlight);
             }
 
+            function createNewFlight(e){
+                let newFlight = {};
+                localHeaderData.forEach(function(item){
+                    newFlight[item.id] = "";
+                });
+
+                ipcRenderer.send('flight:add',newFlight);
+            }
         </script>
     </body>
 </html>
